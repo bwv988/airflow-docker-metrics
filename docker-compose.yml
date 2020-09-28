@@ -45,6 +45,7 @@ services:
             - AIRFLOW__WEBSERVER__WORKER_REFRESH_INTERVAL=1800
         volumes:
             - ./dags:/opt/airflow/dags
+            - airflowlogs:/opt/airflow/logs/
         ports:
             - "8080:8080"
         command: bash -c "airflow initdb && airflow webserver"
@@ -75,7 +76,9 @@ services:
             - statsd-exporter
             - webserver
         volumes:
+            - ./app:/app
             - ./dags:/opt/airflow/dags
+            - airflowlogs:/opt/airflow/logs/
         environment:
             - LOAD_EX=n
             - EXECUTOR=Local
@@ -156,3 +159,6 @@ services:
             - ./grafana/volume/datasources:/grafana/datasources
             - ./grafana/volume/dashboards:/grafana/dashboards
             - ./grafana/volume/provisioning:/grafana/provisioning
+
+volumes:
+    airflowlogs:
